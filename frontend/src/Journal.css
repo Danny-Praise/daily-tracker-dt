@@ -1,0 +1,300 @@
+/* Journal.css */
+
+.journal-page {
+
+  min-height: 100vh;
+
+  padding: 40px;
+
+  background:
+    linear-gradient(
+      to bottom right,
+      #eff6ff,
+      #ffffff,
+      #dbeafe
+    );
+}
+
+/* HEADER */
+
+.journal-header {
+
+  text-align: center;
+
+  margin-bottom: 40px;
+}
+
+.journal-header h1 {
+
+  font-size: 48px;
+
+  color: #0f172a;
+
+  margin-bottom: 15px;
+}
+
+.journal-header p {
+
+  color: #64748b;
+
+  font-size: 18px;
+}
+
+/* EDITOR */
+
+.journal-editor {
+
+  background: white;
+
+  padding: 35px;
+
+  border-radius: 30px;
+
+  box-shadow:
+    0 10px 35px rgba(0,0,0,0.06);
+
+  margin-bottom: 50px;
+}
+
+/* TOOLBAR */
+
+.toolbar {
+
+  display: flex;
+
+  gap: 15px;
+
+  margin-bottom: 25px;
+
+  flex-wrap: wrap;
+}
+
+.toolbar button {
+
+  width: 50px;
+  height: 50px;
+
+  border: none;
+
+  border-radius: 14px;
+
+  background: #2563eb;
+
+  color: white;
+
+  cursor: pointer;
+
+  font-size: 18px;
+
+  transition: 0.3s;
+}
+
+.toolbar button:hover {
+
+  transform: translateY(-3px);
+}
+
+.toolbar select {
+
+  padding: 12px 16px;
+
+  border-radius: 12px;
+
+  border:
+    1px solid #cbd5e1;
+
+  outline: none;
+}
+
+/* TEXTAREA */
+
+.journal-editor textarea {
+
+  width: 100%;
+
+  min-height: 280px;
+
+  border: none;
+
+  outline: none;
+
+  resize: none;
+
+  padding: 25px;
+
+  border-radius: 20px;
+
+  background: #f8fafc;
+
+  line-height: 1.8;
+
+  margin-bottom: 25px;
+}
+
+/* SAVE */
+
+.save-btn {
+
+  background:
+    linear-gradient(
+      135deg,
+      #2563eb,
+      #3b82f6
+    );
+
+  color: white;
+
+  border: none;
+
+  padding: 16px 30px;
+
+  border-radius: 16px;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  font-size: 16px;
+
+  transition: 0.3s;
+}
+
+.save-btn:hover {
+
+  transform: translateY(-4px);
+}
+
+/* NOTES */
+
+.notes-section h2 {
+
+  margin-bottom: 30px;
+
+  font-size: 36px;
+
+  color: #0f172a;
+}
+
+.notes-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit,minmax(320px,1fr));
+
+  gap: 25px;
+}
+
+.note-card {
+
+  background: white;
+
+  padding: 30px;
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 10px 35px rgba(0,0,0,0.05);
+
+  transition: 0.3s;
+}
+
+.note-card:hover {
+
+  transform: translateY(-8px);
+}
+
+.note-content {
+
+  line-height: 1.8;
+
+  color: #0f172a;
+
+  margin-bottom: 25px;
+}
+
+.note-date {
+
+  color: #64748b;
+
+  margin-bottom: 20px;
+
+  font-size: 14px;
+}
+
+/* ACTIONS */
+
+.note-actions {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+.note-actions button {
+
+  border: none;
+
+  padding: 12px 18px;
+
+  border-radius: 12px;
+
+  cursor: pointer;
+
+  background: #2563eb;
+
+  color: white;
+}
+
+.delete-note {
+
+  background: #ef4444 !important;
+}
+
+/* DARK MODE */
+
+.app.dark .journal-page {
+
+  background:
+    linear-gradient(
+      to bottom right,
+      #020617,
+      #0f172a
+    );
+}
+
+.app.dark .journal-editor,
+.app.dark .note-card {
+
+  background:
+    rgba(15,23,42,0.85);
+
+  border:
+    1px solid rgba(255,255,255,0.08);
+}
+
+.app.dark .journal-header h1,
+.app.dark .notes-section h2,
+.app.dark .note-content {
+
+  color: white;
+}
+
+.app.dark .journal-header p,
+.app.dark .note-date {
+
+  color: #cbd5e1;
+}
+
+.app.dark textarea {
+
+  background: #111827;
+
+  color: white;
+}

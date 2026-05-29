@@ -1,0 +1,118 @@
+.admin-page{
+
+  min-height:100vh;
+
+  padding:120px 8% 60px;
+
+  background:#f5f7fb;
+
+  transition:0.4s;
+}
+
+.admin-page.dark{
+
+  background:#0f172a;
+
+  color:white;
+}
+
+.admin-header{
+
+  margin-bottom:40px;
+}
+
+.admin-header h1{
+
+  font-size:3rem;
+  margin-bottom:10px;
+}
+
+.admin-header p{
+
+  color:gray;
+}
+
+.admin-page.dark .admin-header p{
+
+  color:#cbd5e1;
+}
+
+/* STATS */
+
+.admin-stats{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(220px,1fr)
+    );
+
+  gap:25px;
+
+  margin-bottom:50px;
+}
+
+.admin-card{
+
+  background:white;
+
+  padding:35px;
+
+  border-radius:24px;
+
+  box-shadow:
+    0 10px 30px
+    rgba(0,0,0,0.08);
+
+  transition:0.3s;
+}
+
+.admin-page.dark .admin-card{
+
+  background:#1e293b;
+}
+
+.admin-card:hover{
+
+  transform:translateY(-8px);
+}
+
+.admin-card h2{
+
+  font-size:2.5rem;
+
+  margin-bottom:10px;
+
+  color:#6366f1;
+}
+
+/* SECTION */
+
+.admin-section{
+
+  margin-top:20px;
+}
+
+.activity-card{
+
+  margin-top:20px;
+
+  background:white;
+
+  padding:35px;
+
+  border-radius:24px;
+
+  line-height:2.2;
+
+  box-shadow:
+    0 10px 30px
+    rgba(0,0,0,0.08);
+}
+
+.admin-page.dark .activity-card{
+
+  background:#1e293b;
+}

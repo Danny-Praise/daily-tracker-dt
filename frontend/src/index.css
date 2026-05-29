@@ -1,0 +1,116 @@
+/* ==================================================
+   GLOBAL RESET
+================================================== */
+
+* {
+
+  margin: 0;
+
+  padding: 0;
+
+  box-sizing: border-box;
+}
+
+/* ==================================================
+   HTML + BODY
+================================================== */
+
+html,
+body {
+
+  width: 100%;
+
+  overflow-x: hidden;
+
+  scroll-behavior: smooth;
+
+  font-family:
+    "Inter",
+    "Segoe UI",
+    sans-serif;
+
+  background: #ffffff;
+}
+
+/* ROOT */
+
+#root {
+
+  width: 100%;
+
+  overflow-x: hidden;
+}
+
+/* ==================================================
+   GLOBAL APP
+================================================== */
+
+.app {
+
+  width: 100%;
+
+  min-height: 100vh;
+
+  overflow-x: hidden;
+
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
+}
+
+/* ==================================================
+   IMAGES
+================================================== */
+
+img {
+
+  max-width: 100%;
+
+  display: block;
+}
+
+/* ==================================================
+   BUTTONS
+================================================== */
+
+button {
+
+  font-family: inherit;
+}
+
+/* ==================================================
+   LINKS
+================================================== */
+
+a {
+
+  text-decoration: none;
+
+  color: inherit;
+}
+
+/* ==================================================
+   SCROLLBAR
+================================================== */
+
+::-webkit-scrollbar {
+
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+
+  background: #e2e8f0;
+}
+
+::-webkit-scrollbar-thumb {
+
+  background: #94a3b8;
+
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+
+  background: #64748b;
+}
