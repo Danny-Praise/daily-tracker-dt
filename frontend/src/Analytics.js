@@ -49,13 +49,26 @@ function Analytics({ goals = [] }) {
     "#00C897"
   ];
 
+  const completionRatio =
+    totalGoals === 0
+      ? 0
+      : Math.round(
+          (completedGoals / totalGoals) * 100
+        );
+
   return (
 
     <div className="analytics-container">
-
-      <h2>
-        Analytics Overview 📊
-      </h2>
+      <div className="analytics-summary">
+        <div>
+          <p>At a glance</p>
+          <h2>Goal Performance</h2>
+        </div>
+        <div className="analytics-pill">
+          <span>{completionRatio}%</span>
+          <p>Completion rate</p>
+        </div>
+      </div>
 
       {/* STATS */}
 

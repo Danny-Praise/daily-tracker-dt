@@ -4,6 +4,7 @@ import "./Journal.css";
 
 import {
   useEffect,
+  useRef,
   useState
 } from "react";
 
@@ -12,7 +13,7 @@ import {
   FaUnderline,
   FaSave,
   FaTrash,
-  FaFont
+  FaArchive
 } from "react-icons/fa";
 
 function Journal() {
@@ -24,10 +25,12 @@ function Journal() {
     useState([]);
 
   const [fontSize, setFontSize] =
-    useState("18");
+    useState("20");
 
   const [fontFamily, setFontFamily] =
     useState("Poppins");
+
+  const textAreaRef = useRef(null);
 
   // LOAD SAVED NOTES
 
@@ -47,20 +50,13 @@ function Journal() {
   // SAVE NOTE
 
   const saveNote = () => {
-
     if (!text.trim()) return;
 
     const newNote = {
-
       id: Date.now(),
-
       content: text,
-
-      date:
-        new Date().toLocaleString(),
-
+      date: new Date().toLocaleString(),
       fontSize,
-
       fontFamily
     };
 
@@ -99,27 +95,51 @@ function Journal() {
   // EDIT NOTE
 
   const editNote = (note) => {
-
     setText(note.content);
-
     deleteNote(note.id);
   };
 
-  // FORMAT
+  const wrapSelection = (startTag, endTag) => {
+    const textarea = textAreaRef.current;
+    if (!textarea) return;
+
+    const { selectionStart, selectionEnd, value } = textarea;
+    const before = value.slice(0, selectionStart);
+    const selected = value.slice(selectionStart, selectionEnd) || "Your text";
+    const after = value.slice(selectionEnd);
+
+    const updated = `${before}${startTag}${selected}${endTag}${after}`;
+    setText(updated);
+
+    const cursorPos = selectionEnd + startTag.length + endTag.length;
+    requestAnimationFrame(() => {
+      textarea.focus();
+      textarea.setSelectionRange(cursorPos, cursorPos);
+    });
+  };
 
   const addBold = () => {
-
-    setText(
-      text + " <b>Bold Text</b> "
-    );
+    wrapSelection("<strong>", "</strong>");
   };
 
   const addUnderline = () => {
+    wrapSelection("<u>", "</u>");
+  };
 
-    setText(
-      text +
-      " <u>Underlined Text</u> "
+  const archiveNote = (note) => {
+    const archived =
+      JSON.parse(
+        localStorage.getItem(
+          "dt-journal-archive"
+        ) || "[]"
+      );
+
+    localStorage.setItem(
+      "dt-journal-archive",
+      JSON.stringify([note, ...archived])
     );
+
+    deleteNote(note.id);
   };
 
   return (
@@ -229,20 +249,18 @@ function Journal() {
         {/* TEXTAREA */}
 
         <textarea
+          id="journal-textarea"
+          ref={textAreaRef}
           placeholder="Write something amazing today..."
-
           value={text}
-
           onChange={(e) =>
             setText(
               e.target.value
             )
           }
-
           style={{
             fontSize:
               `${fontSize}px`,
-
             fontFamily
           }}
         />
@@ -307,26 +325,28 @@ function Journal() {
 
               <div className="note-actions">
 
-                <button
+                  <button
                   onClick={() =>
                     editNote(note)
                   }
                 >
-
                   Edit
-
                 </button>
-
+                <button
+                  className="archive-note"
+                  onClick={() =>
+                    archiveNote(note)
+                  }
+                >
+                  <FaArchive /> Archive
+                </button>
                 <button
                   className="delete-note"
-
                   onClick={() =>
                     deleteNote(note.id)
                   }
                 >
-
                   <FaTrash />
-
                 </button>
 
               </div>

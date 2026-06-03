@@ -192,7 +192,35 @@
 
   position: relative;
 
-  padding-bottom: 10px;
+  padding-bottom: 8px;
+}
+
+/* YOU ICON */
+
+.user-icon {
+  width: 55px;
+  height: 55px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  color: #2563eb;
+  font-size: 28px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.user-icon:hover {
+  transform: translateY(-2px);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.app.dark .user-icon {
+  background: rgba(255, 255, 255, 0.08);
+  color: #93c5fd;
+  border-color: rgba(148, 163, 184, 0.25);
 }
 
 /* YOU BUTTON */
@@ -201,8 +229,6 @@
 
   width: 55px;
   height: 55px;
-
-  border-radius: 18px;
 
   border: none;
 
@@ -239,7 +265,7 @@
 
   position: absolute;
 
-  top: 72px;
+  top: 100%;
 
   right: 0;
 
@@ -273,7 +299,8 @@
 
 /* KEEP OPEN */
 
-.user-menu:hover .user-dropdown {
+.user-menu:hover .user-dropdown,
+.user-menu.show .user-dropdown {
 
   opacity: 1;
 
@@ -301,6 +328,19 @@
   font-size: 15px;
 
   transition: 0.3s;
+}
+
+.user-dropdown div {
+  padding: 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+  color: inherit;
+}
+
+.user-dropdown div:hover {
+  background: rgba(37, 99, 235, 0.08);
+  color: #0f172a;
 }
 
 .user-dropdown button:hover {
@@ -332,13 +372,14 @@
 .dropdown {
 
   position: relative;
+  padding-bottom: 8px;
 }
 
 .dropdown-content {
 
   position: absolute;
 
-  top: 40px;
+  top: 100%;
 
   left: 0;
 
@@ -360,7 +401,8 @@
   z-index: 9999;
 }
 
-.dropdown:hover .dropdown-content {
+.dropdown:hover .dropdown-content,
+.dropdown.show .dropdown-content {
 
   display: block;
 }
@@ -385,11 +427,27 @@
 
   border:
     1px solid rgba(255,255,255,0.08);
+
+  color: white;
 }
 
 .app.dark .dropdown-content li:hover {
 
   background: #1e293b;
+}
+
+.app.dark .dropdown-content li {
+
+  color: white;
+}
+
+.app.dark .user-dropdown {
+  background: #111827;
+  color: white;
+}
+
+.app.dark .user-dropdown div:hover {
+  background: rgba(255, 255, 255, 0.06);
 }
 
 /* MOBILE */

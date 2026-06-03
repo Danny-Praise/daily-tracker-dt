@@ -5,8 +5,11 @@ import "./Navbar.css";
 import {
   FaUserCircle,
   FaMoon,
-  FaSun
+  FaSun,
+  FaLock
 } from "react-icons/fa";
+
+import { useState } from "react";
 
 function Navbar({
   darkMode,
@@ -14,6 +17,9 @@ function Navbar({
   loggedInUser,
   setLoggedInUser
 }) {
+
+  const [sphereOpen, setSphereOpen] = useState(false);
+  const [userOpen, setUserOpen] = useState(false);
 
   return (
 
@@ -42,9 +48,16 @@ function Navbar({
 
         {/* SPHERES DROPDOWN */}
 
-        <li className="dropdown">
+        <li
+          className={`dropdown${sphereOpen ? " show" : ""}`}
+          onMouseEnter={() => setSphereOpen(true)}
+          onMouseLeave={() => setSphereOpen(false)}
+        >
 
-          <span className="dropdown-title">
+          <span
+            className="dropdown-title"
+            onClick={() => setSphereOpen((prev) => !prev)}
+          >
 
             Spheres ▾
 
@@ -127,12 +140,17 @@ function Navbar({
 
         ) : (
 
-          <div className="user-menu">
+          <div
+            className={`user-menu${userOpen ? " show" : ""}`}
+            onMouseEnter={() => setUserOpen(true)}
+            onMouseLeave={() => setUserOpen(false)}
+          >
 
-            {/* USER ICON */}
+            {/* YOU BUTTON */}
 
             <FaUserCircle
               className="user-icon"
+              onClick={() => setUserOpen((prev) => !prev)}
             />
 
             {/* DROPDOWN */}
@@ -140,13 +158,13 @@ function Navbar({
             <div className="user-dropdown">
 
               <div
-  onClick={() =>
-    window.location.href =
-      "/journal"
-  }
->
-  Journal
-</div>
+                onClick={() =>
+                  window.location.href =
+                    "/journal"
+                }
+              >
+                Journal
+              </div>
               <div
                 onClick={() =>
                   window.location.href =
@@ -155,7 +173,6 @@ function Navbar({
               >
                 Profile
               </div>
-
               <div
                 onClick={() =>
                   window.location.href =
@@ -163,6 +180,14 @@ function Navbar({
                 }
               >
                 Dashboard
+              </div>
+              <div
+                onClick={() =>
+                  window.location.href =
+                    "/archive"
+                }
+              >
+                Archive <FaLock style={{ marginLeft: "8px" }} />
               </div>
 
               <div

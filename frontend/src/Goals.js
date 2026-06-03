@@ -1,10 +1,15 @@
 import "./Goals.css";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import axios from "axios";
-
 import Analytics from "./Analytics";
+import { goalAPI } from "./api/apiClient";
+import {
+  FaLightbulb,
+  FaCalendarAlt,
+  FaHeart
+} from "react-icons/fa";
 
 function Goals({ user }) {
 
@@ -29,49 +34,327 @@ function Goals({ user }) {
   const [filterCategory, setFilterCategory] =
     useState("all");
 
-  // FETCH GOALS
+  const [suggestedCategory, setSuggestedCategory] =
+    useState("");
+  const [goalFormOpen, setGoalFormOpen] =
+    useState(false);
+  const [bookTitle, setBookTitle] =
+    useState("");
+  const [selectedLevel, setSelectedLevel] =
+    useState("easy");
+  const [startDate, setStartDate] =
+    useState("");
+  const [endDate, setEndDate] =
+    useState("");
+  const [dailyTime, setDailyTime] =
+    useState("");
+  const [reminderLead, setReminderLead] =
+    useState("30 min");
+  const [goalAlert, setGoalAlert] =
+    useState("");
 
-  const fetchGoals = async () => {
+  const goalPanelRef = useRef(null);
+
+  const goalCategories = [
+    {
+      label: "Fitness",
+      keywords: [
+        "workout",
+        "run",
+        "gym",
+        "exercise",
+        "cardio",
+        "strength",
+        "train",
+        "yoga",
+        "swim"
+      ]
+    },
+    {
+      label: "Health",
+      keywords: [
+        "health",
+        "diet",
+        "sleep",
+        "wellness",
+        "meditate",
+        "nutrition",
+        "mental",
+        "doctor"
+      ]
+    },
+    {
+      label: "Finance",
+      keywords: [
+        "save",
+        "budget",
+        "money",
+        "invest",
+        "debt",
+        "finance",
+        "expense",
+        "income",
+        "earn"
+      ]
+    },
+    {
+      label: "Academic",
+      keywords: [
+        "read",
+        "study",
+        "course",
+        "exam",
+        "book",
+        "learn",
+        "degree",
+        "class",
+        "research",
+        "paper"
+      ]
+    },
+    {
+      label: "Spiritual",
+      keywords: [
+        "spirit",
+        "mindful",
+        "meditate",
+        "meditation",
+        "pray",
+        "faith",
+        "inner",
+        "soul"
+      ]
+    },
+    {
+      label: "Career",
+      keywords: [
+        "career",
+        "job",
+        "interview",
+        "promotion",
+        "skill",
+        "resume",
+        "network",
+        "project",
+        "business"
+      ]
+    },
+    {
+      label: "Relationships",
+      keywords: [
+        "friend",
+        "family",
+        "relationship",
+        "date",
+        "social",
+        "partner",
+        "connect",
+        "team"
+      ]
+    },
+    {
+      label: "Productivity",
+      keywords: [
+        "habit",
+        "routine",
+        "schedule",
+        "focus",
+        "task",
+        "organize",
+        "deadline"
+      ]
+    }
+  ];
+
+  const suggestCategory = (text) => {
+    const normalized = text
+      .toLowerCase()
+      .trim();
+
+    if (!normalized) {
+      return "Productivity";
+    }
+
+    const matched = goalCategories.find((item) =>
+      item.keywords.some((keyword) =>
+        normalized.includes(keyword)
+      )
+    );
+
+    return matched ? matched.label : "Productivity";
+  };
+
+  const suggestFocus = (text) => {
+    const normalized = text.toLowerCase();
+
+    if (!normalized) {
+      return "Personal growth";
+    }
+
+    if (/(piano|music|guitar|drum|sing|song|learn music)/i.test(normalized)) {
+      return "Learn Music";
+    }
+
+    if (/(finance|financial|invest|money|budget|save|earn)/i.test(normalized)) {
+      return "Financial Literacy";
+    }
+
+    if (/(leadership|leader|team|manage|management|career)/i.test(normalized)) {
+      return "Leadership & Career";
+    }
+
+    if (/(read|book|study|learn|course|exam)/i.test(normalized)) {
+      return "Learning & Reading";
+    }
+
+    return "Personal Growth";
+  };
+
+  const shouldAskBook = (text) => {
+    const normalized = text.toLowerCase();
+    return /read.*book|book.*read|novel|book/i.test(normalized);
+  };
+
+  const generateGoalPlan = (
+    goalText,
+    level,
+    book
+  ) => {
+    if (!goalText.trim()) {
+      return "Your personalized plan will appear here once you begin typing your goal.";
+    }
+
+    const baseGoal = `To achieve "${goalText.trim()}", start by breaking your work into clear milestones.`;
+    const bookSection = book
+      ? ` Focus on "${book.trim()}" and divide reading into bite-sized sessions.`
+      : "";
+
+    let paceMessage = "";
+
+    if (level === "easy") {
+      paceMessage =
+        "Take a relaxed pace with only a few tasks each week, keeping your routine smooth and sustainable.";
+    } else if (level === "medium") {
+      paceMessage =
+        "Use a consistent weekly plan with steady checkpoints to keep progress moving without overload.";
+    } else {
+      paceMessage =
+        "Commit to a focused, goal-driven schedule with productive daily habits and clear milestones.";
+    }
+
+    const timeline =
+      startDate && endDate
+        ? ` Your plan runs from ${startDate} to ${endDate}.`
+        : startDate
+        ? ` Start on ${startDate}.`
+        : "";
+
+    const scheduleHint = dailyTime
+      ? ` Aim to engage around ${dailyTime} each day and keep your momentum steady.`
+      : "Set a daily time that fits your routine for best results.";
+
+    const reminderHint = reminderLead
+      ? ` Receive reminders ${reminderLead} before your scheduled time to stay on track.`
+      : "Add a reminder to keep the momentum going.";
+
+    return `${baseGoal}${bookSection} ${timeline} ${scheduleHint} ${reminderHint} ${paceMessage}`;
+  };
+
+  const handleGoalChange = (e) => {
+    const value = e.target.value;
+    setGoal(value);
+
+    if (!category || category === suggestedCategory) {
+      const suggestion = suggestCategory(value);
+      setSuggestedCategory(suggestion);
+    }
+  };
+
+  useEffect(() => {
+    if (goalFormOpen && goalPanelRef.current) {
+      goalPanelRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+  }, [goalFormOpen]);
+
+  const prepareGoalPlan = () => {
+    setGoalAlert("");
+    if (!category) {
+      setSuggestedCategory(suggestCategory(goal));
+    }
+    setGoalFormOpen(true);
+  };
+
+  const resetGoalForm = () => {
+    setGoal("");
+    setCategory("");
+    setSuggestedCategory("");
+    setBookTitle("");
+    setSelectedLevel("easy");
+    setStartDate("");
+    setEndDate("");
+    setDailyTime("");
+    setReminderLead("30 min");
+    setGoalFormOpen(false);
+  };
+
+  const confirmGoal = async () => {
+    if (!goal.trim()) {
+      setGoalAlert("Please describe your goal before saving.");
+      return;
+    }
 
     try {
+      const finalCategory =
+        category ||
+        suggestedCategory ||
+        suggestCategory(goal);
 
+      await goalAPI.create({
+        title: goal,
+        category: finalCategory,
+        start_date: startDate,
+        end_date: endDate,
+        daily_time: dailyTime,
+        reminder: reminderLead,
+        book_title: bookTitle,
+        plan_level: selectedLevel
+      });
+
+      resetGoalForm();
+      setGoalAlert("Goal added successfully!");
+      fetchGoals();
+    } catch (error) {
+      console.log(error);
+      setGoalAlert(
+        "Unable to save this goal right now. Please try again."
+      );
+    }
+  };
+
+  // FETCH GOALS
+
+  const fetchGoals = useCallback(async () => {
+    if (!user?.id) return;
+
+    try {
       const response = await axios.get(
         `http://localhost:5000/api/goals/${user.id}`
       );
 
       setGoals(response.data);
-
     } catch (error) {
-
       console.log(error);
     }
-  };
+  }, [user?.id]);
 
-  // ADD GOAL
-
-  const addGoal = async () => {
-
-    try {
-
-      await axios.post(
-        "http://localhost:5000/api/goals/create",
-        {
-          user_id: user.id,
-          title: goal,
-          category: category
-        }
-      );
-
-      setGoal("");
-      setCategory("");
-
+  useEffect(() => {
+    if (user?.id) {
       fetchGoals();
-
-    } catch (error) {
-
-      console.log(error);
     }
-  };
+  }, [user?.id, fetchGoals]);
 
   // COMPLETE GOAL
 
@@ -189,12 +472,6 @@ function Goals({ user }) {
 
   // LOAD GOALS
 
-  useEffect(() => {
-
-    fetchGoals();
-
-  }, []);
-
   return (
 
     <div className="goals-container">
@@ -202,6 +479,51 @@ function Goals({ user }) {
       <div className="goals-header">
         <h2>Your Goals 🎯</h2>
         <p className="header-subtitle">Track your ambitions, celebrate your wins</p>
+
+        <div className="hero-actions">
+          <button
+            type="button"
+            className="primary-hero-btn"
+            onClick={prepareGoalPlan}
+          >
+            Set a Goal
+          </button>
+          <button
+            type="button"
+            className="secondary-hero-btn"
+            onClick={() => {
+              document
+                .querySelector('.goal-input-section')
+                ?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          >
+            Quick Start
+          </button>
+        </div>
+      </div>
+
+      <div className="hero-features">
+        <div className="feature-card feature-icon-1">
+          <div className="feature-icon">
+            <FaLightbulb />
+          </div>
+          <strong>Smart Prompts</strong>
+          <p>Describe your ambition and let the system suggest the best focus and category.</p>
+        </div>
+        <div className="feature-card feature-icon-2">
+          <div className="feature-icon">
+            <FaCalendarAlt />
+          </div>
+          <strong>Calendar Ready</strong>
+          <p>Set start/end dates, daily session times and reminders with a premium planning flow.</p>
+        </div>
+        <div className="feature-card feature-icon-3">
+          <div className="feature-icon">
+            <FaHeart />
+          </div>
+          <strong>Motivation Hub</strong>
+          <p>Stay inspired with focused guidance, progress visuals, and smart reminders.</p>
+        </div>
       </div>
 
       {/* STATS */}
@@ -268,11 +590,12 @@ function Goals({ user }) {
             type="text"
             placeholder="What's your next goal?"
             value={goal}
-            onChange={(e) =>
-              setGoal(e.target.value)
-            }
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') addGoal();
+            onChange={handleGoalChange}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                prepareGoalPlan();
+              }
             }}
           />
           <span className="input-icon">✍️</span>
@@ -314,12 +637,184 @@ function Goals({ user }) {
           <span className="select-arrow">▼</span>
         </div>
 
-        <button onClick={addGoal} className="add-goal-btn">
+        <button
+          onClick={prepareGoalPlan}
+          className="add-goal-btn"
+        >
           <span>Add Goal</span>
           <span className="btn-icon">+</span>
         </button>
 
       </div>
+
+      {goalAlert && (
+        <div className="goal-alert">
+          {goalAlert}
+        </div>
+      )}
+
+      {goalFormOpen && (
+        <div className="goal-panel" ref={goalPanelRef}>
+          <div className="goal-panel-head">
+            <div>
+              <h3>Goal Planning Studio</h3>
+              <p>
+                Describe your ambition, choose a timeframe, and receive intelligent guidance for a premium plan.
+              </p>
+            </div>
+            <button
+              type="button"
+              className="close-panel-btn"
+              onClick={resetGoalForm}
+            >
+              Close
+            </button>
+          </div>
+
+          <div className="goal-panel-grid">
+            <div className="goal-panel-card">
+              <label>Describe your goal</label>
+              <textarea
+                value={goal}
+                onChange={handleGoalChange}
+                placeholder="I want to grow in financial knowledge, learn piano, or build leadership skills..."
+                rows={5}
+              />
+
+              <label>Category</label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <option value="">Choose a category</option>
+                <option value="Fitness">💪 Fitness</option>
+                <option value="Health">🏥 Health</option>
+                <option value="Finance">💰 Finance</option>
+                <option value="Academic">📚 Academic</option>
+                <option value="Spiritual">🧘 Spiritual</option>
+                <option value="Career">💼 Career</option>
+                <option value="Relationships">🤝 Relationships</option>
+                <option value="Productivity">⚡ Productivity</option>
+              </select>
+
+              <div className="suggestion-panel">
+                <p>
+                  Suggested focus: <strong>{suggestFocus(goal)}</strong>
+                </p>
+                <p>
+                  Suggested category: <strong>{suggestedCategory || suggestCategory(goal)}</strong>
+                </p>
+                <button
+                  type="button"
+                  className="suggestion-apply-btn"
+                  onClick={() => {
+                    setCategory(suggestedCategory || suggestCategory(goal));
+                    setGoalAlert("Suggested category applied.");
+                  }}
+                >
+                  Apply suggestion
+                </button>
+              </div>
+            </div>
+
+            <div className="goal-panel-card">
+              <div className="goal-panel-field-row">
+                <div>
+                  <label>Start date</label>
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label>End date</label>
+                  <input
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="goal-panel-field-row">
+                <div>
+                  <label>Daily time</label>
+                  <input
+                    type="time"
+                    value={dailyTime}
+                    onChange={(e) => setDailyTime(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <label>Reminder</label>
+                  <select
+                    value={reminderLead}
+                    onChange={(e) => setReminderLead(e.target.value)}
+                  >
+                    <option value="15 min">15 minutes before</option>
+                    <option value="30 min">30 minutes before</option>
+                    <option value="1 hour">1 hour before</option>
+                    <option value="2 hours">2 hours before</option>
+                  </select>
+                </div>
+              </div>
+
+              {shouldAskBook(goal) && (
+                <div className="assistant-field">
+                  <label>Book title</label>
+                  <input
+                    type="text"
+                    value={bookTitle}
+                    onChange={(e) => setBookTitle(e.target.value)}
+                    placeholder="e.g. Atomic Habits"
+                  />
+                </div>
+              )}
+
+              <div className="assistant-levels">
+                <label>Plan intensity</label>
+                {['easy', 'medium', 'extreme'].map((level) => (
+                  <button
+                    key={level}
+                    type="button"
+                    className={
+                      selectedLevel === level
+                        ? 'assistant-level active'
+                        : 'assistant-level'
+                    }
+                    onClick={() => setSelectedLevel(level)}
+                  >
+                    {level.charAt(0).toUpperCase() + level.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="assistant-preview">
+            <h4>Plan preview</h4>
+            <p>{generateGoalPlan(goal, selectedLevel, bookTitle)}</p>
+          </div>
+
+          <div className="assistant-actions">
+            <button
+              type="button"
+              className="confirm-plan-btn"
+              onClick={confirmGoal}
+            >
+              Save this Goal Plan
+            </button>
+            <button
+              type="button"
+              className="cancel-plan-btn"
+              onClick={resetGoalForm}
+            >
+              Close panel
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* FILTER SECTION */}
       <div className="filter-section">

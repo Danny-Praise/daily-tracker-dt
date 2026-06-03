@@ -24,6 +24,7 @@ import Register from "./Register";
 import Dashboard from "./Dashboard";
 
 import Profile from "./Profile";
+import Archive from "./Archive";
 
 import AdminLogin from "./AdminLogin";
 import Goals from "./Goals";
@@ -191,6 +192,16 @@ function App() {
             path="/journal"
             element={
               <Journal
+                user={loggedInUser}
+                darkMode={darkMode}
+              />
+            }
+          />
+
+          <Route
+            path="/archive"
+            element={
+              <Archive
                 user={loggedInUser}
                 darkMode={darkMode}
               />

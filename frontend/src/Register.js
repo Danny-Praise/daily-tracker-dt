@@ -21,13 +21,22 @@ function Register() {
 
     try {
 
-      await axios.post(
+      const response = await axios.post(
         "http://localhost:5000/api/users/register",
         {
           full_name,
           email,
           password
         }
+      );
+
+      localStorage.setItem(
+        "dt-token",
+        response.data.token
+      );
+      localStorage.setItem(
+        "dt-user",
+        JSON.stringify(response.data.user)
       );
 
       alert(

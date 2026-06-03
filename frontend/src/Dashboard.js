@@ -160,11 +160,29 @@ function Dashboard({ user }) {
 
           </div>
 
+          <div className="hero-metrics">
+            <div className="metric-pill">
+              <strong>82%</strong> Weekly performance
+            </div>
+            <div className="metric-pill">
+              <strong>15</strong> Active missions
+            </div>
+            <div className="metric-pill">
+              <strong>4.6h</strong> Avg focus time
+            </div>
+          </div>
+
         </div>
 
         {/* RIGHT */}
 
         <div className="hero-right">
+
+          <div className="hero-badge">
+            <span>AI Pulse</span>
+            <strong>Elite Momentum</strong>
+            <small>Predictive boost for your next sprint</small>
+          </div>
 
           <motion.div
             className="ai-orb"
@@ -302,6 +320,10 @@ function Dashboard({ user }) {
 
                   className="module-card"
 
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.45, delay: index * 0.08 }}
                   whileHover={{
                     y: -10,
                     scale: 1.03
@@ -336,88 +358,153 @@ function Dashboard({ user }) {
 
           </div>
 
-          {/* MISSIONS */}
-
-          <div className="dashboard-section">
-
-            <h2>
-              Daily Missions 🎯
-            </h2>
-
-            <div className="mission-list">
-
-              <div className="mission-item">
-
-                <FaCheckCircle />
-
-                Complete 3 goals
-
-              </div>
-
-              <div className="mission-item">
-
-                <FaCheckCircle />
-
-                Write journal entry
-
-              </div>
-
-              <div className="mission-item">
-
-                <FaCheckCircle />
-
-                Study for 2 hours
-
-              </div>
-
-              <div className="mission-item">
-
-                <FaCheckCircle />
-
-                Maintain streak
-
-              </div>
-
+          <div className="dashboard-section mission-timeline">
+            <div className="dashboard-subgrid">
+              <motion.div
+                className="progress-card"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.55 }}
+              >
+                <div className="section-head">
+                  <h2>Daily Missions 🎯</h2>
+                  <p>Focus on the top goals that move the needle today.</p>
+                </div>
+                <div className="mission-list">
+                  <motion.div
+                    className="mission-item completed"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.45, delay: 0.1 }}
+                  >
+                    <div className="mission-label">
+                      <FaCheckCircle />
+                      <div>
+                        <strong>Complete 3 goals</strong>
+                        <span>Maintain momentum with high-impact tasks.</span>
+                      </div>
+                    </div>
+                    <span className="mission-state">Done</span>
+                  </motion.div>
+                  <motion.div
+                    className="mission-item in-progress"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.45, delay: 0.18 }}
+                  >
+                    <div className="mission-label">
+                      <FaCheckCircle />
+                      <div>
+                        <strong>Write journal entry</strong>
+                        <span>Capture insights before they fade.</span>
+                      </div>
+                    </div>
+                    <span className="mission-state">In progress</span>
+                  </motion.div>
+                  <motion.div
+                    className="mission-item pending"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.45, delay: 0.26 }}
+                  >
+                    <div className="mission-label">
+                      <FaCheckCircle />
+                      <div>
+                        <strong>Study for 2 hours</strong>
+                        <span>Push your learning streak further.</span>
+                      </div>
+                    </div>
+                    <span className="mission-state">Pending</span>
+                  </motion.div>
+                  <motion.div
+                    className="mission-item pending"
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.45, delay: 0.34 }}
+                  >
+                    <div className="mission-label">
+                      <FaCheckCircle />
+                      <div>
+                        <strong>Maintain streak</strong>
+                        <span>Stay consistent and unlock your next reward.</span>
+                      </div>
+                    </div>
+                    <span className="mission-state">Pending</span>
+                  </motion.div>
+                </div>
+              </motion.div>
+              <motion.div
+                className="progress-card"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.55, delay: 0.08 }}
+              >
+                <div className="section-head">
+                  <h2>Activity Timeline 📈</h2>
+                  <p>Review how your day unfolded and what momentum you built.</p>
+                </div>
+                <div className="timeline">
+                  <motion.div
+                    className="timeline-item"
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.45, delay: 0.12 }}
+                  >
+                    <div className="timeline-meta">
+                      <span>Today</span>
+                      <strong>🔥 Maintained daily streak</strong>
+                    </div>
+                    <p>Boosted productivity score and stayed on track.</p>
+                  </motion.div>
+                  <motion.div
+                    className="timeline-item"
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.45, delay: 0.18 }}
+                  >
+                    <div className="timeline-meta">
+                      <span>Today</span>
+                      <strong>🎯 Completed finance goal</strong>
+                    </div>
+                    <p>Marked progress toward your long-term goal plan.</p>
+                  </motion.div>
+                  <motion.div
+                    className="timeline-item"
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.45, delay: 0.24 }}
+                  >
+                    <div className="timeline-meta">
+                      <span>Yesterday</span>
+                      <strong>📝 Added journal entry</strong>
+                    </div>
+                    <p>Captured reflections to improve your next week.</p>
+                  </motion.div>
+                  <motion.div
+                    className="timeline-item"
+                    initial={{ opacity: 0, x: 20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.45, delay: 0.3 }}
+                  >
+                    <div className="timeline-meta">
+                      <span>Yesterday</span>
+                      <strong>🚀 Productivity increased</strong>
+                    </div>
+                    <p>Your average focus time rose by 14%.</p>
+                  </motion.div>
+                </div>
+              </motion.div>
             </div>
-
-          </div>
-
-          {/* TIMELINE */}
-
-          <div className="dashboard-section">
-
-            <h2>
-              Activity Timeline 📈
-            </h2>
-
-            <div className="timeline">
-
-              <div className="timeline-item">
-
-                🔥 Maintained daily streak
-
-              </div>
-
-              <div className="timeline-item">
-
-                🎯 Completed finance goal
-
-              </div>
-
-              <div className="timeline-item">
-
-                📝 Added journal entry
-
-              </div>
-
-              <div className="timeline-item">
-
-                🚀 Productivity increased
-
-              </div>
-
-            </div>
-
           </div>
 
         </div>
@@ -473,7 +560,13 @@ function Dashboard({ user }) {
 
           {/* FOCUS TIMER */}
 
-          <div className="focus-card">
+          <motion.div
+            className="focus-card"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
 
             <div className="card-top">
 
@@ -495,11 +588,17 @@ function Dashboard({ user }) {
 
             </button>
 
-          </div>
+          </motion.div>
 
           {/* CALENDAR */}
 
-          <div className="calendar-card">
+          <motion.div
+            className="calendar-card"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.16 }}
+          >
 
             <div className="card-top">
 
@@ -527,11 +626,17 @@ function Dashboard({ user }) {
 
             </div>
 
-          </div>
+          </motion.div>
 
           {/* ACHIEVEMENTS */}
 
-          <div className="achievement-card">
+          <motion.div
+            className="achievement-card"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.22 }}
+          >
 
             <div className="card-top">
 
@@ -561,11 +666,17 @@ function Dashboard({ user }) {
 
             </div>
 
-          </div>
+          </motion.div>
 
           {/* MOTIVATION */}
 
-          <div className="motivation-card">
+          <motion.div
+            className="motivation-card"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.28 }}
+          >
 
             <FaRocket />
 
@@ -581,7 +692,7 @@ function Dashboard({ user }) {
 
             </p>
 
-          </div>
+          </motion.div>
 
         </div>
 

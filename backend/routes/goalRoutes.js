@@ -1,5 +1,5 @@
 const express = require("express");
-
+const authMiddleware = require("../middleware/authMiddleware");
 const router = express.Router();
 
 const {
@@ -9,18 +9,12 @@ const {
   deleteGoal,
   editGoal
 } = require("../controllers/goalController");
-router.post("/create", createGoal);
 
-router.get("/:user_id", getGoals);
-
-router.put("/complete/:id", completeGoal);
-router.delete(
-  "/delete/:id",
-  deleteGoal
-);
-router.put(
-  "/edit/:id",
-  editGoal
-);
+// All goal routes require authentication
+router.post("/create", authMiddleware, createGoal);
+router.get("/:user_id", authMiddleware, getGoals);
+router.put("/complete/:id", authMiddleware, completeGoal);
+router.delete("/delete/:id", authMiddleware, deleteGoal);
+router.put("/edit/:id", authMiddleware, editGoal);
 
 module.exports = router;

@@ -44,6 +44,10 @@ function Login({ setLoggedInUser }) {
           response.data.user
         )
       );
+      localStorage.setItem(
+        "dt-token",
+        response.data.token
+      );
 
       navigate("/dashboard");
 
