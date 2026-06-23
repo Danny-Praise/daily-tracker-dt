@@ -28,6 +28,7 @@ import Archive from "./Archive";
 
 import AdminLogin from "./AdminLogin";
 import Goals from "./Goals";
+import Habits from "./Habits";
 import Analytics from "./Analytics";
 import Journal from "./Journal";
 import Calendar from "./Calendar";
@@ -180,6 +181,18 @@ function App() {
             path="/goals"
             element={
               <Goals
+                user={loggedInUser}
+                darkMode={darkMode}
+              />
+            }
+          />
+
+          {/* HABITS */}
+
+          <Route
+            path="/habits"
+            element={
+              <Habits
                 user={loggedInUser}
                 darkMode={darkMode}
               />

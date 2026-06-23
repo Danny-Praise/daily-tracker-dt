@@ -160,6 +160,14 @@ function Navbar({
               <div
                 onClick={() =>
                   window.location.href =
+                    "/habits"
+                }
+              >
+                Habits
+              </div>
+              <div
+                onClick={() =>
+                  window.location.href =
                     "/journal"
                 }
               >
