@@ -5,7 +5,8 @@ const router = express.Router();
 const {
   createJournalEntry,
   getJournalEntries,
-  archiveJournalEntry
+  archiveJournalEntry,
+  unlockArchivedEntries
 } = require("../controllers/journalController");
 
 router.post("/create", authMiddleware, createJournalEntry);
