@@ -33,6 +33,30 @@ const validateJournalInput = (content) => {
   return { valid: true };
 };
 
+const HABIT_TYPES = ["boolean", "numeric"];
+
+const validateHabitInput = (title, category, type, target_value) => {
+  if (!title || title.trim().length === 0) {
+    return { valid: false, error: "Habit title is required" };
+  }
+  if (title.length > 255) {
+    return { valid: false, error: "Habit title is too long (max 255 chars)" };
+  }
+  if (category && category.length > 50) {
+    return { valid: false, error: "Category is too long (max 50 chars)" };
+  }
+  if (type && !HABIT_TYPES.includes(type)) {
+    return { valid: false, error: "Habit type must be 'boolean' or 'numeric'" };
+  }
+  if (type === "numeric") {
+    const target = Number(target_value);
+    if (!Number.isFinite(target) || target <= 0) {
+      return { valid: false, error: "Numeric habits require a target value greater than 0" };
+    }
+  }
+  return { valid: true };
+};
+
 const validateRegistration = (full_name, email, password) => {
   if (!full_name || full_name.trim().length === 0) {
     return { valid: false, error: "Name is required" };
@@ -63,6 +87,8 @@ module.exports = {
   validateEmail,
   validatePassword,
   validateGoalInput,
+  validateJournalInput,
+  validateHabitInput,
   validateRegistration,
   validateLogin,
 };

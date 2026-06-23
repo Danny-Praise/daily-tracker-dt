@@ -52,6 +52,38 @@ const initializeDatabase = async () => {
     `);
     console.log("✅ Journal entries table created/verified");
 
+    // Create habits table
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS habits (
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        title VARCHAR(255) NOT NULL,
+        category VARCHAR(50),
+        type VARCHAR(10) NOT NULL DEFAULT 'boolean',
+        target_value NUMERIC,
+        unit VARCHAR(30),
+        active BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    console.log("✅ Habits table created/verified");
+
+    // Create habit logs table (one row per habit per day = a check-in)
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS habit_logs (
+        id SERIAL PRIMARY KEY,
+        habit_id INTEGER NOT NULL REFERENCES habits(id) ON DELETE CASCADE,
+        user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+        log_date DATE NOT NULL DEFAULT CURRENT_DATE,
+        value NUMERIC,
+        completed BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE (habit_id, log_date)
+      );
+    `);
+    console.log("✅ Habit logs table created/verified");
+
     // Create indexes for better query performance
     await pool.query(`
       CREATE INDEX IF NOT EXISTS idx_goals_user_id ON goals(user_id);
@@ -59,6 +91,9 @@ const initializeDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
       CREATE INDEX IF NOT EXISTS idx_journal_user_id ON journal_entries(user_id);
       CREATE INDEX IF NOT EXISTS idx_journal_archived ON journal_entries(archived);
+      CREATE INDEX IF NOT EXISTS idx_habits_user_id ON habits(user_id);
+      CREATE INDEX IF NOT EXISTS idx_habit_logs_user_id ON habit_logs(user_id);
+      CREATE INDEX IF NOT EXISTS idx_habit_logs_habit_id ON habit_logs(habit_id);
     `);
     console.log("✅ Indexes created/verified");
 

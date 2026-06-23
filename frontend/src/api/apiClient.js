@@ -73,4 +73,25 @@ export const goalAPI = {
     apiClient.delete(`/goals/delete/${goalId}`),
 };
 
+// Habit API calls
+export const habitAPI = {
+  create: (payload) =>
+    apiClient.post("/habits/create", payload),
+
+  getAll: (userId) =>
+    apiClient.get(`/habits/${userId}`),
+
+  update: (habitId, payload) =>
+    apiClient.put(`/habits/edit/${habitId}`, payload),
+
+  delete: (habitId) =>
+    apiClient.delete(`/habits/delete/${habitId}`),
+
+  checkIn: (habitId, payload = {}) =>
+    apiClient.post(`/habits/checkin/${habitId}`, payload),
+
+  heatmap: (userId, days = 120) =>
+    apiClient.get(`/habits/heatmap/${userId}?days=${days}`),
+};
+
 export default apiClient;
