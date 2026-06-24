@@ -73,4 +73,40 @@ export const goalAPI = {
     apiClient.delete(`/goals/delete/${goalId}`),
 };
 
+// User Profile API calls
+export const userAPI = {
+  getProfile: () =>
+    apiClient.get("/users/profile"),
+
+  updateProfile: (data) =>
+    apiClient.put("/users/profile", data),
+};
+
+// Journal API calls
+export const journalAPI = {
+  create: (content) =>
+    apiClient.post("/journal/create", { content }),
+
+  getAll: (userId) =>
+    apiClient.get(`/journal/${userId}`),
+
+  archive: (entryId, archived) =>
+    apiClient.put(`/journal/archive/${entryId}`, { archived }),
+
+  unlockArchives: (archivePassword) =>
+    apiClient.post("/journal/archives/unlock", { archive_password: archivePassword }),
+};
+
+// AI API calls
+export const aiAPI = {
+  getGoalSuggestions: (prompt, category) =>
+    apiClient.post("/ai/suggestions", { prompt, category }),
+
+  getGoalPlan: (title, category, difficulty) =>
+    apiClient.post("/ai/plan", { title, category, difficulty }),
+
+  getJournalInsights: () =>
+    apiClient.get("/ai/journal-insights"),
+};
+
 export default apiClient;

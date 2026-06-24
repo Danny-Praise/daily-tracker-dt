@@ -16,8 +16,9 @@ import {
   FaArchive
 } from "react-icons/fa";
 
-function Journal() {
+import { journalAPI } from "./api/apiClient";
 
+function Journal({ user }) {
   const [text, setText] =
     useState("");
 
@@ -35,61 +36,44 @@ function Journal() {
   // LOAD SAVED NOTES
 
   useEffect(() => {
+    if (user?.id) {
+      loadJournalEntries();
+    }
+  }, [user?.id]);
 
-    const storedNotes =
-      JSON.parse(
-        localStorage.getItem(
-          "dt-journal"
-        )
-      ) || [];
-
-    setSavedNotes(storedNotes);
-
-  }, []);
+  const loadJournalEntries = async () => {
+    try {
+      const response = await journalAPI.getAll(user.id);
+      setSavedNotes(response.data.filter(note => !note.archived));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // SAVE NOTE
 
-  const saveNote = () => {
+  const saveNote = async () => {
     if (!text.trim()) return;
 
-    const newNote = {
-      id: Date.now(),
-      content: text,
-      date: new Date().toLocaleString(),
-      fontSize,
-      fontFamily
-    };
-
-    const updatedNotes = [
-      newNote,
-      ...savedNotes
-    ];
-
-    setSavedNotes(updatedNotes);
-
-    localStorage.setItem(
-      "dt-journal",
-      JSON.stringify(updatedNotes)
-    );
-
-    setText("");
+    try {
+      const response = await journalAPI.create(text);
+      setSavedNotes([response.data.entry, ...savedNotes]);
+      setText("");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // DELETE NOTE
 
-  const deleteNote = (id) => {
-
-    const filtered =
-      savedNotes.filter(
-        (note) => note.id !== id
-      );
-
-    setSavedNotes(filtered);
-
-    localStorage.setItem(
-      "dt-journal",
-      JSON.stringify(filtered)
-    );
+  const deleteNote = async (id) => {
+    try {
+      // We'll archive it instead of deleting
+      await journalAPI.archive(id, true);
+      setSavedNotes(savedNotes.filter(note => note.id !== id));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   // EDIT NOTE
@@ -126,20 +110,13 @@ function Journal() {
     wrapSelection("<u>", "</u>");
   };
 
-  const archiveNote = (note) => {
-    const archived =
-      JSON.parse(
-        localStorage.getItem(
-          "dt-journal-archive"
-        ) || "[]"
-      );
-
-    localStorage.setItem(
-      "dt-journal-archive",
-      JSON.stringify([note, ...archived])
-    );
-
-    deleteNote(note.id);
+  const archiveNote = async (note) => {
+    try {
+      await journalAPI.archive(note.id, true);
+      setSavedNotes(savedNotes.filter(n => n.id !== note.id));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -310,16 +287,16 @@ function Journal() {
 
                 style={{
                   fontSize:
-                    `${note.fontSize}px`,
+                    `${fontSize}px`,
 
                   fontFamily:
-                    note.fontFamily
+                    fontFamily
                 }}
               />
 
               <p className="note-date">
 
-                {note.date}
+                {new Date(note.created_at).toLocaleString()}
 
               </p>
 

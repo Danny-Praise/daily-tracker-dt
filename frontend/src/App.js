@@ -14,6 +14,7 @@ import {
 } from "react";
 
 import Navbar from "./Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import Home from "./Home";
 
@@ -32,6 +33,9 @@ import Analytics from "./Analytics";
 import Journal from "./Journal";
 import Calendar from "./Calendar";
 import AdminDashboard from "./AdminDashboard";
+import About from "./pages/About";
+import Features from "./pages/Features";
+import Documentation from "./pages/Documentation";
 
 function App() {
 
@@ -148,12 +152,12 @@ function App() {
           <Route
             path="/dashboard"
             element={
-
-              <Dashboard
-                user={loggedInUser}
-                darkMode={darkMode}
-              />
-
+              <ProtectedRoute>
+                <Dashboard
+                  user={loggedInUser}
+                  darkMode={darkMode}
+                />
+              </ProtectedRoute>
             }
           />
 
@@ -162,15 +166,15 @@ function App() {
           <Route
             path="/profile"
             element={
-
-              <Profile
-                user={loggedInUser}
-                setLoggedInUser={
-                  setLoggedInUser
-                }
-                darkMode={darkMode}
-              />
-
+              <ProtectedRoute>
+                <Profile
+                  user={loggedInUser}
+                  setLoggedInUser={
+                    setLoggedInUser
+                  }
+                  darkMode={darkMode}
+                />
+              </ProtectedRoute>
             }
           />
 
@@ -179,10 +183,12 @@ function App() {
           <Route
             path="/goals"
             element={
-              <Goals
-                user={loggedInUser}
-                darkMode={darkMode}
-              />
+              <ProtectedRoute>
+                <Goals
+                  user={loggedInUser}
+                  darkMode={darkMode}
+                />
+              </ProtectedRoute>
             }
           />
 
@@ -191,20 +197,23 @@ function App() {
           <Route
             path="/journal"
             element={
-              <Journal
-                user={loggedInUser}
-                darkMode={darkMode}
-              />
+              <ProtectedRoute>
+                <Journal
+                  user={loggedInUser}
+                />
+              </ProtectedRoute>
             }
           />
 
           <Route
             path="/archive"
             element={
-              <Archive
-                user={loggedInUser}
-                darkMode={darkMode}
-              />
+              <ProtectedRoute>
+                <Archive
+                  user={loggedInUser}
+                  darkMode={darkMode}
+                />
+              </ProtectedRoute>
             }
           />
 
@@ -213,10 +222,12 @@ function App() {
           <Route
             path="/analytics"
             element={
-              <Analytics
-                user={loggedInUser}
-                darkMode={darkMode}
-              />
+              <ProtectedRoute>
+                <Analytics
+                  user={loggedInUser}
+                  darkMode={darkMode}
+                />
+              </ProtectedRoute>
             }
           />
 
@@ -225,10 +236,12 @@ function App() {
           <Route
             path="/calendar"
             element={
-              <Calendar
-                user={loggedInUser}
-                darkMode={darkMode}
-              />
+              <ProtectedRoute>
+                <Calendar
+                  user={loggedInUser}
+                  darkMode={darkMode}
+                />
+              </ProtectedRoute>
             }
           />
 
@@ -237,27 +250,38 @@ function App() {
           <Route
             path="/admin-login"
             element={
-
               <AdminLogin
                 setLoggedInUser={
                   setLoggedInUser
                 }
               />
-
             }
           />
 
           {/* ADMIN DASHBOARD */}
 
           <Route
-  path="/admin-dashboard"
-  element={
-    <AdminDashboard
-      darkMode={darkMode}
-    />
-  }
+            path="/admin-dashboard"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard
+                  darkMode={darkMode}
+                />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+  path="/about"
+  element={<About />}
 />
-
+   <Route
+  path="/features"
+  element={<Features />}
+/>
+<Route
+  path="/documentation"
+  element={<Documentation />}
+/>
         </Routes>
 
       </div>

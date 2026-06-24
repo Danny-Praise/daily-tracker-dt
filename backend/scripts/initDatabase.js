@@ -33,11 +33,28 @@ const initializeDatabase = async () => {
         category VARCHAR(50),
         completed BOOLEAN DEFAULT FALSE,
         completed_at TIMESTAMP,
+        start_date DATE,
+        end_date DATE,
+        daily_time TIME,
+        reminder VARCHAR(20),
+        book_title VARCHAR(255),
+        plan_level VARCHAR(20),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
     console.log("✅ Goals table created/verified");
+
+    // Add new columns to goals table if they don't exist
+    await pool.query(`
+      ALTER TABLE goals ADD COLUMN IF NOT EXISTS start_date DATE;
+      ALTER TABLE goals ADD COLUMN IF NOT EXISTS end_date DATE;
+      ALTER TABLE goals ADD COLUMN IF NOT EXISTS daily_time TIME;
+      ALTER TABLE goals ADD COLUMN IF NOT EXISTS reminder VARCHAR(20);
+      ALTER TABLE goals ADD COLUMN IF NOT EXISTS book_title VARCHAR(255);
+      ALTER TABLE goals ADD COLUMN IF NOT EXISTS plan_level VARCHAR(20);
+    `);
+    console.log("✅ Goals table columns updated/verified");
 
     // Create journal entries table
     await pool.query(`

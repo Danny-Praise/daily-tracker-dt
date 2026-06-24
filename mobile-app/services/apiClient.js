@@ -114,3 +114,32 @@ export const archiveJournalEntry = async (entryId, archived, token) => {
     body: JSON.stringify({ archived })
   });
 };
+
+// AI API Calls
+export const getGoalSuggestions = async (prompt, category, token) => {
+  return request("/api/ai/suggestions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ prompt, category })
+  });
+};
+
+export const getGoalPlan = async (title, category, difficulty, token) => {
+  return request("/api/ai/plan", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({ title, category, difficulty })
+  });
+};
+
+export const getJournalInsights = async (token) => {
+  return request("/api/ai/journal-insights", {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+};

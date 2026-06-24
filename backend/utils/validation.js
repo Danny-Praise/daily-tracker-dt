@@ -63,6 +63,7 @@ module.exports = {
   validateEmail,
   validatePassword,
   validateGoalInput,
+  validateJournalInput,
   validateRegistration,
   validateLogin,
 };

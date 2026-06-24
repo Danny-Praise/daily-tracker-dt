@@ -2,56 +2,36 @@ import "./Goals.css";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import axios from "axios";
 import Analytics from "./Analytics";
-import { goalAPI } from "./api/apiClient";
+import { goalAPI, aiAPI } from "./api/apiClient";
 import {
   FaLightbulb,
   FaCalendarAlt,
-  FaHeart
+  FaHeart,
+  FaRobot,
+  FaPlus
 } from "react-icons/fa";
 
 function Goals({ user }) {
-
-  const [goal, setGoal] =
-    useState("");
-
-  const [category, setCategory] =
-    useState("");
-
-  const [goals, setGoals] =
-    useState([]);
-
-  const [editingId, setEditingId] =
-    useState(null);
-
-  const [editText, setEditText] =
-    useState("");
-
-  const [editCategory, setEditCategory] =
-    useState("");
-
-  const [filterCategory, setFilterCategory] =
-    useState("all");
-
-  const [suggestedCategory, setSuggestedCategory] =
-    useState("");
-  const [goalFormOpen, setGoalFormOpen] =
-    useState(false);
-  const [bookTitle, setBookTitle] =
-    useState("");
-  const [selectedLevel, setSelectedLevel] =
-    useState("easy");
-  const [startDate, setStartDate] =
-    useState("");
-  const [endDate, setEndDate] =
-    useState("");
-  const [dailyTime, setDailyTime] =
-    useState("");
-  const [reminderLead, setReminderLead] =
-    useState("30 min");
-  const [goalAlert, setGoalAlert] =
-    useState("");
+  const [goal, setGoal] = useState("");
+  const [category, setCategory] = useState("");
+  const [goals, setGoals] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [editText, setEditText] = useState("");
+  const [editCategory, setEditCategory] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
+  const [suggestedCategory, setSuggestedCategory] = useState("");
+  const [goalFormOpen, setGoalFormOpen] = useState(false);
+  const [bookTitle, setBookTitle] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState("easy");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [dailyTime, setDailyTime] = useState("");
+  const [reminderLead, setReminderLead] = useState("30 min");
+  const [goalAlert, setGoalAlert] = useState("");
+  const [aiSuggestions, setAiSuggestions] = useState([]);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const goalPanelRef = useRef(null);
 
@@ -340,15 +320,40 @@ function Goals({ user }) {
     if (!user?.id) return;
 
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/goals/${user.id}`
-      );
-
+      const response = await goalAPI.getAll(user.id);
       setGoals(response.data);
     } catch (error) {
       console.log(error);
     }
   }, [user?.id]);
+
+  // LOAD AI SUGGESTIONS
+  const loadAISuggestions = async () => {
+    try {
+      setLoadingSuggestions(true);
+      const response = await aiAPI.getGoalSuggestions(goal, category);
+      setAiSuggestions(response.data.suggestions);
+      setShowSuggestions(true);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingSuggestions(false);
+    }
+  };
+
+  // ADD SUGGESTED GOAL
+  const addSuggestedGoal = async (suggestion) => {
+    try {
+      await goalAPI.create({
+        title: suggestion.title,
+        category: suggestion.category
+      });
+      fetchGoals();
+      setGoalAlert(`Added goal: ${suggestion.title}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (user?.id) {
@@ -359,17 +364,10 @@ function Goals({ user }) {
   // COMPLETE GOAL
 
   const markComplete = async (id) => {
-
     try {
-
-      await axios.put(
-        `http://localhost:5000/api/goals/complete/${id}`
-      );
-
+      await goalAPI.complete(id);
       fetchGoals();
-
     } catch (error) {
-
       console.log(error);
     }
   };
@@ -377,17 +375,10 @@ function Goals({ user }) {
   // DELETE GOAL
 
   const deleteGoal = async (id) => {
-
     try {
-
-      await axios.delete(
-        `http://localhost:5000/api/goals/delete/${id}`
-      );
-
+      await goalAPI.delete(id);
       fetchGoals();
-
     } catch (error) {
-
       console.log(error);
     }
   };
@@ -395,23 +386,11 @@ function Goals({ user }) {
   // EDIT GOAL
 
   const editGoal = async (id) => {
-
     try {
-
-      await axios.put(
-        `http://localhost:5000/api/goals/edit/${id}`,
-        {
-          title: editText,
-          category: editCategory
-        }
-      );
-
+      await goalAPI.update(id, editText, editCategory);
       setEditingId(null);
-
       fetchGoals();
-
     } catch (error) {
-
       console.log(error);
     }
   };
@@ -525,6 +504,58 @@ function Goals({ user }) {
           <p>Stay inspired with focused guidance, progress visuals, and smart reminders.</p>
         </div>
       </div>
+
+      {/* AI SUGGESTIONS TOGGLE */}
+      <div style={{ margin: "20px 0", display: "flex", gap: "15px", alignItems: "center" }}>
+        <button
+          onClick={loadAISuggestions}
+          style={{
+            padding: "12px 24px",
+            borderRadius: "16px",
+            border: "none",
+            background: "linear-gradient(135deg, #10b981, #059669)",
+            color: "white",
+            fontSize: "15px",
+            fontWeight: 600,
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            boxShadow: "0 4px 15px rgba(16, 185, 129, 0.3)"
+          }}
+        >
+          <FaRobot />
+          {loadingSuggestions ? "Generating..." : "Get AI Suggestions"}
+        </button>
+      </div>
+
+      {/* AI SUGGESTIONS */}
+      {showSuggestions && aiSuggestions.length > 0 && (
+        <div className="ai-suggestions-container">
+          <h3 className="ai-suggestions-title">
+            <FaRobot />
+            AI-Powered Goal Suggestions
+          </h3>
+
+          <div className="ai-suggestions-grid">
+            {aiSuggestions.map((suggestion, index) => (
+              <div
+                key={index}
+                className="ai-suggestion-card"
+              >
+                <h4>{suggestion.title}</h4>
+                <p><strong>Category:</strong> {suggestion.category}</p>
+                <p><strong>Plan:</strong> {suggestion.plan}</p>
+                <p><strong>Priority:</strong> {suggestion.priority}</p>
+                <button onClick={() => addSuggestedGoal(suggestion)}>
+                  <FaPlus />
+                  Add This Goal
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* STATS */}
 

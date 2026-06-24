@@ -4,7 +4,7 @@ const { validateGoalInput } = require("../utils/validation");
 // CREATE GOAL
 const createGoal = async (req, res) => {
   try {
-    const { title, category } = req.body;
+    const { title, category, start_date, end_date, daily_time, reminder, book_title, plan_level } = req.body;
     const user_id = req.userId; // From auth middleware
 
     // Validate input
@@ -15,10 +15,10 @@ const createGoal = async (req, res) => {
 
     const newGoal = await pool.query(
       `INSERT INTO goals
-       (user_id, title, category, completed)
-       VALUES ($1, $2, $3, FALSE)
-       RETURNING id, user_id, title, category, completed, created_at`,
-      [user_id, title.trim(), category ? category.trim() : null]
+       (user_id, title, category, completed, start_date, end_date, daily_time, reminder, book_title, plan_level)
+       VALUES ($1, $2, $3, FALSE, $4, $5, $6, $7, $8, $9)
+       RETURNING id, user_id, title, category, completed, start_date, end_date, daily_time, reminder, book_title, plan_level, created_at, updated_at`,
+      [user_id, title.trim(), category ? category.trim() : null, start_date || null, end_date || null, daily_time || null, reminder || null, book_title ? book_title.trim() : null, plan_level || null]
     );
 
     res.status(201).json({
@@ -46,7 +46,7 @@ const getGoals = async (req, res) => {
     }
 
     const goals = await pool.query(
-      "SELECT id, title, category, completed, created_at FROM goals WHERE user_id = $1 ORDER BY created_at DESC",
+      "SELECT id, title, category, completed, completed_at, start_date, end_date, daily_time, reminder, book_title, plan_level, created_at, updated_at FROM goals WHERE user_id = $1 ORDER BY created_at DESC",
       [user_id]
     );
 
@@ -83,7 +83,8 @@ const completeGoal = async (req, res) => {
     await pool.query(
       `UPDATE goals
        SET completed = TRUE,
-           completed_at = CURRENT_TIMESTAMP
+           completed_at = CURRENT_TIMESTAMP,
+           updated_at = CURRENT_TIMESTAMP
        WHERE id = $1`,
       [id]
     );
@@ -141,7 +142,7 @@ const deleteGoal = async (req, res) => {
 const editGoal = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, category } = req.body;
+    const { title, category, start_date, end_date, daily_time, reminder, book_title, plan_level } = req.body;
     const userId = req.userId; // From auth middleware
 
     // Validate input
@@ -168,10 +169,16 @@ const editGoal = async (req, res) => {
       `UPDATE goals
        SET title = $1,
            category = $2,
+           start_date = $3,
+           end_date = $4,
+           daily_time = $5,
+           reminder = $6,
+           book_title = $7,
+           plan_level = $8,
            updated_at = CURRENT_TIMESTAMP
-       WHERE id = $3
-       RETURNING id, title, category, completed, created_at, updated_at`,
-      [title.trim(), category ? category.trim() : null, id]
+       WHERE id = $9
+       RETURNING id, title, category, completed, completed_at, start_date, end_date, daily_time, reminder, book_title, plan_level, created_at, updated_at`,
+      [title.trim(), category ? category.trim() : null, start_date || null, end_date || null, daily_time || null, reminder || null, book_title ? book_title.trim() : null, plan_level || null, id]
     );
 
     res.status(200).json({

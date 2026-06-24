@@ -4,9 +4,12 @@ import "./Register.css";
 
 import { useState } from "react";
 
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+import { authAPI } from "./api/apiClient";
 
 function Register() {
+  const navigate = useNavigate();
 
   const [full_name, setFullName] =
     useState("");
@@ -21,14 +24,7 @@ function Register() {
 
     try {
 
-      const response = await axios.post(
-        "http://localhost:5000/api/users/register",
-        {
-          full_name,
-          email,
-          password
-        }
-      );
+      const response = await authAPI.register(full_name, email, password);
 
       localStorage.setItem(
         "dt-token",
@@ -43,8 +39,7 @@ function Register() {
         "Registration successful 🚀"
       );
 
-      window.location.href =
-        "/login";
+      navigate("/login");
 
     } catch (error) {
 

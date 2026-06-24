@@ -3,7 +3,7 @@
 import "./Profile.css";
 
 import {
-  useState
+  useState, useEffect
 } from "react";
 
 import {
@@ -20,59 +20,72 @@ import {
   FaCog
 } from "react-icons/fa";
 
-function Profile({ user, setLoggedInUser }) {
+import { userAPI } from "./api/apiClient";
 
+function Profile({ user, setLoggedInUser }) {
   // STATES
 
-  const [editing, setEditing] =
-    useState(false);
+  const [editing, setEditing] = useState(false);
+  const [name, setName] = useState(user?.full_name || user?.name || "");
+  const [email, setEmail] = useState(user?.email || "");
+  const [profilePicture, setProfilePicture] = useState(user?.profilePicture || "");
+  const [archivePassword, setArchivePassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [name, setName] =
-    useState(
-      user?.full_name || user?.name || ""
-    );
+  useEffect(() => {
+    if (user?.id) {
+      loadProfile();
+    }
+  }, [user?.id]);
 
-  const [email, setEmail] =
-    useState(
-      user?.email || ""
-    );
-
-  const [profilePicture, setProfilePicture] =
-    useState(
-      user?.profilePicture || ""
-    );
-
-  const [archivePassword, setArchivePassword] =
-    useState(
-      user?.archivePassword || ""
-    );
+  const loadProfile = async () => {
+    try {
+      const response = await userAPI.getProfile();
+      const profileData = response.data.user;
+      setName(profileData.full_name);
+      setEmail(profileData.email);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // SAVE PROFILE
+  const saveProfile = async () => {
+    try {
+      setLoading(true);
+      const updateData: any = { full_name: name };
+      if (archivePassword) {
+        updateData.archive_password = archivePassword;
+      }
 
-  const saveProfile = () => {
-    const updatedUser = {
-      ...user,
-      full_name: name,
-      name,
-      email,
-      profilePicture,
-      archivePassword
-    };
+      const response = await userAPI.updateProfile(updateData);
 
-    localStorage.setItem(
-      "dt-user",
-      JSON.stringify(updatedUser)
-    );
+      const updatedUser = {
+        ...user,
+        ...response.data.user
+      };
 
-    if (typeof setLoggedInUser === "function") {
-      setLoggedInUser(updatedUser);
+      localStorage.setItem(
+        "dt-user",
+        JSON.stringify(updatedUser)
+      );
+
+      if (typeof setLoggedInUser === "function") {
+        setLoggedInUser(updatedUser);
+      }
+
+      alert(
+        "Profile Updated Successfully 🚀"
+      );
+
+      setEditing(false);
+      setArchivePassword("");
+    } catch (error) {
+      console.log(error);
+      alert("Failed to update profile");
+    } finally {
+      setLoading(false);
     }
-
-    alert(
-      "Profile Updated Successfully 🚀"
-    );
-
-    setEditing(false);
   };
 
   // IF USER NOT FOUND

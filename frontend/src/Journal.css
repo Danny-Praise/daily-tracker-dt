@@ -1,58 +1,41 @@
 /* Journal.css */
 
 .journal-page {
-
   min-height: 100vh;
-
   padding: 40px;
-
-  background:
-    linear-gradient(
-      to bottom right,
-      #eff6ff,
-      #ffffff,
-      #dbeafe
-    );
+  background: linear-gradient(
+    to bottom right,
+    #eff6ff,
+    #ffffff,
+    #dbeafe
+  );
 }
 
 /* HEADER */
 
 .journal-header {
-
   text-align: center;
-
   margin-bottom: 40px;
 }
 
 .journal-header h1 {
-
   font-size: 48px;
-
   color: #0f172a;
-
   margin-bottom: 15px;
 }
 
 .journal-header p {
-
   color: #64748b;
-
   font-size: 18px;
 }
 
 /* EDITOR */
 
 .journal-editor {
-
   background: white;
-
   padding: 35px;
-
   border-radius: 30px;
-
-  box-shadow:
-    0 10px 35px rgba(0,0,0,0.06);
-
+  box-shadow: 0 10px 35px rgba(0,0,0,0.06);
   margin-bottom: 50px;
 }
 
@@ -80,13 +63,8 @@
 }
 
 .toolbar button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
-}
-
-.toolbar button:hover {
-
   transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
 }
 
 .toolbar select {
@@ -101,121 +79,92 @@
 /* TEXTAREA */
 
 .journal-editor textarea {
-
   width: 100%;
-
   min-height: 280px;
-
   border: none;
-
   outline: none;
-
   resize: none;
-
   padding: 25px;
-
   border-radius: 20px;
-
   background: #f8fafc;
-
   line-height: 1.8;
-
   margin-bottom: 25px;
+  color: #0f172a;
+  font-family: inherit;
+  font-size: 16px;
+}
+
+.journal-editor textarea::placeholder {
+  color: #94a3b8;
 }
 
 /* SAVE */
 
 .save-btn {
-
-  background:
-    linear-gradient(
-      135deg,
-      #2563eb,
-      #3b82f6
-    );
-
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #3b82f6
+  );
   color: white;
-
   border: none;
-
   padding: 16px 30px;
-
   border-radius: 16px;
-
   cursor: pointer;
-
   display: flex;
-
   align-items: center;
-
   gap: 10px;
-
   font-size: 16px;
-
+  font-weight: 600;
   transition: 0.3s;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
 .save-btn:hover {
-
   transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
 }
 
 /* NOTES */
 
 .notes-section h2 {
-
   margin-bottom: 30px;
-
   font-size: 36px;
-
   color: #0f172a;
 }
 
 .notes-grid {
-
   display: grid;
-
-  grid-template-columns:
-    repeat(auto-fit,minmax(320px,1fr));
-
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 25px;
 }
 
 .note-card {
-
-  background: white;
-
+  background: linear-gradient(135deg, #ffffff, #f8fbff);
   padding: 30px;
-
-  border-radius: 24px;
-
-  box-shadow:
-    0 10px 35px rgba(0,0,0,0.05);
-
-  transition: 0.3s;
+  border-radius: 30px;
+  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #e2e8f0;
 }
 
 .note-card:hover {
-
   transform: translateY(-8px);
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.12);
 }
 
 .note-content {
-
-  line-height: 1.8;
-
+  line-height: 1.9;
   color: #0f172a;
-
   margin-bottom: 25px;
+  font-size: 18px;
 }
 
 .note-date {
-
   color: #64748b;
-
   margin-bottom: 20px;
-
   font-size: 14px;
+  font-weight: 500;
 }
 
 /* ACTIONS */
@@ -252,70 +201,60 @@
   background: #ef4444 !important;
 }
 
-.note-card {
-  background: linear-gradient(135deg, #ffffff, #f8fbff);
-  padding: 30px;
-  border-radius: 30px;
-  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.note-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.12);
-}
-
-.note-content {
-  line-height: 1.9;
-  color: #0f172a;
-  margin-bottom: 25px;
-  font-size: 18px;
-}
-
-.note-date {
-  color: #64748b;
-  margin-bottom: 20px;
-  font-size: 14px;
-}
-
-/* DARK MODE */
+/* COMPREHENSIVE DARK MODE */
 
 .app.dark .journal-page {
-
-  background:
-    linear-gradient(
-      to bottom right,
-      #020617,
-      #0f172a
-    );
-}
-
-.app.dark .journal-editor,
-.app.dark .note-card {
-
-  background:
-    rgba(15,23,42,0.85);
-
-  border:
-    1px solid rgba(255,255,255,0.08);
+  background: linear-gradient(
+    to bottom right,
+    #020617,
+    #0f172a
+  );
 }
 
 .app.dark .journal-header h1,
-.app.dark .notes-section h2,
-.app.dark .note-content {
-
-  color: white;
+.app.dark .notes-section h2 {
+  color: #f1f5f9;
 }
 
-.app.dark .journal-header p,
-.app.dark .note-date {
-
-  color: #cbd5e1;
+.app.dark .journal-header p {
+  color: #94a3b8;
 }
 
-.app.dark textarea {
+.app.dark .journal-editor {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.3);
+}
 
+.app.dark .toolbar select {
   background: #111827;
+  border-color: #374151;
+  color: #f8fafc;
+}
 
-  color: white;
+.app.dark .journal-editor textarea {
+  background: #111827;
+  color: #f8fafc;
+}
+
+.app.dark .journal-editor textarea::placeholder {
+  color: #64748b;
+}
+
+.app.dark .note-card {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.app.dark .note-card:hover {
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+}
+
+.app.dark .note-content {
+  color: #f1f5f9;
+}
+
+.app.dark .note-date {
+  color: #94a3b8;
 }

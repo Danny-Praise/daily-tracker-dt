@@ -3,11 +3,8 @@
 ================================================== */
 
 * {
-
   margin: 0;
-
   padding: 0;
-
   box-sizing: border-box;
 }
 
@@ -17,27 +14,19 @@
 
 html,
 body {
-
   width: 100%;
-
   overflow-x: hidden;
-
   scroll-behavior: smooth;
-
   font-family:
     "Inter",
     "Segoe UI",
     sans-serif;
-
-  background: #ffffff;
 }
 
 /* ROOT */
 
 #root {
-
   width: 100%;
-
   overflow-x: hidden;
 }
 
@@ -46,16 +35,19 @@ body {
 ================================================== */
 
 .app {
-
   width: 100%;
-
   min-height: 100vh;
-
   overflow-x: hidden;
-
+  background: #ffffff;
+  color: #0f172a;
   transition:
     background 0.3s ease,
     color 0.3s ease;
+}
+
+.app.dark {
+  background: #020617;
+  color: #f8fafc;
 }
 
 /* ==================================================
@@ -63,9 +55,7 @@ body {
 ================================================== */
 
 img {
-
   max-width: 100%;
-
   display: block;
 }
 
@@ -74,8 +64,17 @@ img {
 ================================================== */
 
 button {
-
   font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 /* ==================================================
@@ -83,10 +82,13 @@ button {
 ================================================== */
 
 a {
-
   text-decoration: none;
-
   color: inherit;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: #2563eb;
 }
 
 /* ==================================================
@@ -94,23 +96,62 @@ a {
 ================================================== */
 
 ::-webkit-scrollbar {
-
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-
   background: #e2e8f0;
 }
 
 ::-webkit-scrollbar-thumb {
-
   background: #94a3b8;
-
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-
   background: #64748b;
+}
+
+/* Dark Mode Scrollbar */
+.app.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.app.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.app.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* ==================================================
+   UTILITY CLASSES
+================================================== */
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-4 {
+  gap: 1rem;
 }

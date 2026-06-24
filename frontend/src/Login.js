@@ -6,7 +6,7 @@ import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import axios from "axios";
+import { authAPI } from "./api/apiClient";
 
 function Login({ setLoggedInUser }) {
 
@@ -22,13 +22,7 @@ function Login({ setLoggedInUser }) {
 
     try {
 
-      const response = await axios.post(
-        "http://localhost:5000/api/users/login",
-        {
-          email,
-          password
-        }
-      );
+      const response = await authAPI.login(email, password);
 
       alert(
         response.data.message

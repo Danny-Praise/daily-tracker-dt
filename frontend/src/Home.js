@@ -1,3 +1,23 @@
+import { Link } from "react-router-dom";
+
+import {
+  FaHome,
+  FaInfoCircle,
+  FaRocket,
+  FaBook,
+  FaQuestionCircle,
+  FaBullseye,
+  FaTasks,
+  FaPenFancy,
+  FaChartLine,
+  FaMoneyBillWave,
+  FaFileAlt,
+  FaDownload,
+  FaEnvelope,
+  FaPhone,
+  FaLinkedin,
+  FaGithub
+} from "react-icons/fa";
 import "./Home.css";
 
 import { motion } from "framer-motion";
@@ -430,7 +450,7 @@ function Home({ darkMode }) {
 
             <h3>Free</h3>
 
-            <h1>$0</h1>
+            <h1>FCFA 0</h1>
 
             <p>Perfect for starters</p>
 
@@ -459,7 +479,7 @@ function Home({ darkMode }) {
 
             <h3>Premium</h3>
 
-            <h1>$12/mo</h1>
+            <h1>FCFA 5099/mo</h1>
 
             <p>For ambitious individuals</p>
 
@@ -513,88 +533,191 @@ function Home({ darkMode }) {
 
       <footer className="footer">
 
-        <div className="footer-top">
+  <div className="footer-container">
 
-          <h2>DT AI 🚀</h2>
+    {/* TOP CARDS */}
 
-          <p>
-            Transform your productivity, goals, and lifestyle with our AI-powered personal tracking ecosystem. Achieve your dreams with data-driven insights.
-          </p>
+    <div className="footer-cards">
 
-          <div className="social-icons">
-            <i className="fab fa-x-twitter"></i>
-            <i className="fab fa-instagram"></i>
-            <i className="fab fa-facebook"></i>
-            <i className="fab fa-youtube"></i>
-          </div>
+      <div className="footer-feature-card">
+        <FaBullseye />
+        <h4>Goal Tracking</h4>
+        <p>
+          Create and monitor personal
+          and professional goals.
+        </p>
+      </div>
 
-        </div>
+      <div className="footer-feature-card">
+        <FaChartLine />
+        <h4>Analytics</h4>
+        <p>
+          Visual reports and productivity
+          insights.
+        </p>
+      </div>
 
-        <div className="footer-container">
+      <div className="footer-feature-card">
+        🤖
+        <h4>AI Assistant</h4>
+        <p>
+          Smart recommendations and
+          intelligent suggestions.
+        </p>
+      </div>
 
-          <div className="footer-grid">
+    </div>
 
-            {/* Product Column */}
-            <div className="footer-column">
-              <h3>Product</h3>
-              <ul>
-                <li>Features</li>
-                <li>Pricing Plans</li>
-                <li>Security</li>
-                <li>Roadmap</li>
-                <li>Updates</li>
-              </ul>
-            </div>
+    {/* FOOTER GRID */}
 
-            {/* Company Column */}
-            <div className="footer-column">
-              <h3>Company</h3>
-              <ul>
-                <li>About Us</li>
-                <li>Blog</li>
-                <li>Careers</li>
-                <li>Press Kit</li>
-                <li>Contact</li>
-              </ul>
-            </div>
+    <div className="footer-grid">
 
-            {/* Resources Column */}
-            <div className="footer-column">
-              <h3>Resources</h3>
-              <ul>
-                <li>Documentation</li>
-                <li>API Reference</li>
-                <li>Community</li>
-                <li>Support Center</li>
-                <li>FAQ</li>
-              </ul>
-            </div>
+      {/* BRAND */}
 
-            {/* Legal Column */}
-            <div className="footer-column">
-              <h3>Legal</h3>
-              <ul>
-                <li>Privacy Policy</li>
-                <li>Terms of Service</li>
-                <li>Cookie Policy</li>
-                <li>GDPR</li>
-                <li>Compliance</li>
-              </ul>
-            </div>
+      <div className="footer-column">
 
-          </div>
+        <h2>Daily Tracker AI</h2>
+
+        <p>
+          An intelligent productivity platform
+          designed to help users manage goals,
+          habits, finances, tasks and personal
+          growth.
+        </p>
+
+        <div className="footer-socials">
+
+          <FaLinkedin />
+
+          <FaGithub />
+
+          <FaEnvelope />
 
         </div>
 
-        <div className="footer-bottom">
-          <div>© 2026 DT AI Ecosystem. All rights reserved.</div>
-          <div className="footer-credits">
-            <a href="#privacy">Privacy Policy</a>
-            <a href="#terms">Terms of Service</a>
-            <a href="#cookies">Cookie Settings</a>
-          </div>
-        </div>
+      </div>
 
+      {/* PLATFORM */}
+
+      <div className="footer-column">
+
+        <h3>Platform</h3>
+
+        <ul>
+
+          <li>
+            <Link className="footer-link" to="/">
+              <FaHome /> Home
+            </Link>
+          </li>
+
+          <li>
+            <Link className="footer-link" to="/about">
+              <FaInfoCircle /> About Project
+            </Link>
+          </li>
+
+          <li>
+            <Link className="footer-link" to="/features">
+              <FaRocket /> Features
+            </Link>
+          </li>
+
+          <li>
+            <Link className="footer-link" to="/documentation">
+              <FaBook /> Documentation
+            </Link>
+          </li>
+
+          <li>
+            <Link className="footer-link" to="/faq">
+              <FaQuestionCircle /> FAQ
+            </Link>
+          </li>
+
+        </ul>
+
+      </div>
+
+      {/* PRODUCTIVITY */}
+
+      <div className="footer-column">
+
+        <h3>Productivity Tools</h3>
+
+        <ul>
+
+          <li><FaBullseye /> Goal Management</li>
+
+          <li><FaTasks /> Task Tracking</li>
+
+          <li><FaPenFancy /> Smart Journal</li>
+
+          <li><FaMoneyBillWave /> Finance Tracker</li>
+
+          <li><FaChartLine /> Analytics Dashboard</li>
+
+        </ul>
+
+      </div>
+
+      {/* RESOURCES */}
+
+      <div className="footer-column">
+
+        <h3>Resources</h3>
+
+        <ul>
+
+          <li><FaFileAlt /> User Guide</li>
+
+          <li><FaDownload /> Downloads</li>
+
+          <li><FaBook /> Tutorials</li>
+
+          <li><FaFileAlt /> Project Report</li>
+
+        </ul>
+
+      </div>
+
+      {/* CONTACT */}
+
+      <div className="footer-column">
+
+        <h3>Contact</h3>
+
+        <ul>
+
+          <li>
+            <FaEnvelope />
+            dailytracker@gmail.com
+          </li>
+
+          <li>
+            <FaPhone />
+            +237 XXX XXX XXX
+          </li>
+
+          <li>
+            University Final Year Project
+          </li>
+
+        </ul>
+
+      </div>
+
+    </div>
+
+    <div className="footer-bottom">
+
+      © 2026 Daily Tracker AI |
+      Final Year Project |
+      Developed by Danny
+
+    </div>
+
+  </div>
       </footer>
     </div>
 
